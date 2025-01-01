@@ -16,6 +16,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,7 +36,6 @@ import com.example.gymsaround.ui.theme.GymsAroundTheme
 @Composable
 fun GymsScreen() {
     val vm: GymsViewModel = viewModel()
-
 
 //lazy column
     LazyColumn {
@@ -115,11 +115,11 @@ fun DefaultIcon(
 fun GymDetails(gym: Gym, modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         Text(
-            text = gym.name, style = MaterialTheme.typography.titleLarge, color = Color.Green
+            text = gym.gym_name, style = MaterialTheme.typography.titleLarge, color = Color.Blue
         )
 
         Text(
-            text = gym.address,
+            text = gym.gym_location,
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.alpha(0.74f)
         )

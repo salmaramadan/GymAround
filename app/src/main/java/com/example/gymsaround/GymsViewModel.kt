@@ -2,16 +2,50 @@ package com.example.gymsaround
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
-class GymsViewModel(private val stateHandel: SavedStateHandle) : ViewModel() {
+class GymsViewModel(private val stateHandle: SavedStateHandle) : ViewModel() {
 
-    var state by mutableStateOf(restoreSelectedGym())
+    var state by mutableStateOf(emptyList<Gym>())
+    private var apiService: GymsApiService
+    private lateinit var gymsCall: Call<List<Gym>>
 
-    private fun getGyms() = listOfGyms
+    init {
+        val retrofit: Retrofit = Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("https://gymsaround-15d3c-default-rtdb.firebaseio.com/")
+            .build()
+        apiService = retrofit.create(GymsApiService::class.java)
+        getGyms()
+    }
+
+    private fun getGyms() {
+        gymsCall = apiService.getGyms()
+        gymsCall.enqueue(object : Callback<List<Gym>> {
+            override fun onResponse(call: Call<List<Gym>>, response: Response<List<Gym>>) {
+                response.body()?.let {
+                    state = it.restoreSelectedGyms()
+                }
+            }
+
+            override fun onFailure(call: Call<List<Gym>>, t: Throwable) {
+                t.printStackTrace()
+            }
+        })
+    }
+
+
+    override fun onCleared() {
+        super.onCleared()
+        gymsCall.cancel()
+    }
 
     fun toggleFavoriteState(gymId: Int) {
         val gyms = state.toMutableList()
@@ -20,35 +54,26 @@ class GymsViewModel(private val stateHandel: SavedStateHandle) : ViewModel() {
         storeSelectedGym(gyms[itemIndex])
         state = gyms
     }
-    private fun storeSelectedGym(gym: Gym){
-        val savedHandelList = stateHandel.get<List<Int>?>(FAV_IDS).orEmpty().toMutableList()
+
+    private fun storeSelectedGym(gym: Gym) {
+        val savedIds = stateHandle.get<List<Int>?>(FAV_IDS).orEmpty().toMutableList()
         if (gym.isFavorite) {
-            savedHandelList.add(gym.id)
+            savedIds.add(gym.id)
         } else {
-            savedHandelList.remove(gym.id)
+            savedIds.remove(gym.id)
         }
-        stateHandel[FAV_IDS] = savedHandelList
-
+        stateHandle[FAV_IDS] = savedIds
     }
 
-
-    private fun restoreSelectedGym(): List<Gym> {
-        val savedIds = stateHandel.get<List<Int>>(FAV_IDS).orEmpty()
-        return listOfGyms.map { gym ->
-            gym.copy(isFavorite = savedIds.contains(gym.id))
+    private fun List<Gym>.restoreSelectedGyms(): List<Gym> {
+        val savedIds = stateHandle.get<List<Int>?>(FAV_IDS).orEmpty()
+        return map { gym ->
+            gym.copy(isFavorite = gym.id in savedIds)
         }
     }
 
-    //    private fun restoreSelectedGym():List<Gym>{
-//        val gyms = state.toMutableList()
-//        stateHandel.get<List<Int>?>(FAV_IDS).let { savedIds ->
-//            savedIds?.forEach { id ->
-//                gyms.find { it.id == id }?.isFavorite = true
-//            }
-//        }
-//        return gyms
-//    }
-    companion object{
+    companion object {
         const val FAV_IDS = "favoriteGymsIds"
     }
 }
+
