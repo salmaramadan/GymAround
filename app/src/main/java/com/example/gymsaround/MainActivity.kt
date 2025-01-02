@@ -17,6 +17,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import com.example.gymsaround.ui.theme.GymsAroundTheme
 
 class MainActivity : ComponentActivity() {
@@ -41,9 +42,20 @@ private fun GymsAroundApp() {
 
             }
         }
-        composable(route = "gyms/{gym_id}", arguments = listOf(navArgument("gym_id") {
-            type = NavType.IntType
-        })) {
+        composable(
+            route = "gyms/{gym_id}",
+            arguments = listOf(
+                navArgument("gym_id") {
+                    type = NavType.IntType
+                },
+            ),
+            deepLinks = listOf(
+               navDeepLink {
+//                     uriPattern = "gyms/{gym_id}"
+                     uriPattern = "https://www.gymsaround.com/details/{gym_id}"
+               }
+            )
+        ) {
 //            val gymId=it.arguments?.getInt("gym_id")
             GymsDetailsScreen()
         }
