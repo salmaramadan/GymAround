@@ -11,6 +11,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.gymsaround.ui.theme.GymsAroundTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,29 +25,28 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             GymsAroundTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                GymsAroundApp()
             }
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+private fun GymsAroundApp() {
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = "gyms") {
+        composable(route = "gyms") {
+            GymsScreen { id ->
+                navController.navigate("gyms/$id")
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    GymsAroundTheme {
-        Greeting("Android")
+            }
+        }
+        composable(route = "gyms/{gym_id}", arguments = listOf(navArgument("gym_id") {
+            type = NavType.IntType
+        })) {
+//            val gymId=it.arguments?.getInt("gym_id")
+            GymsDetailsScreen()
+        }
     }
 }
+

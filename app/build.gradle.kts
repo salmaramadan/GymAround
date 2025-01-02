@@ -68,6 +68,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    //implementation("gson:gson:2.8.8")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 }

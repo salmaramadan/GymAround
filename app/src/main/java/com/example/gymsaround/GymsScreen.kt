@@ -16,12 +16,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -34,15 +28,17 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.gymsaround.ui.theme.GymsAroundTheme
 
 @Composable
-fun GymsScreen() {
+fun GymsScreen(onItemClick: (Int) -> Unit) {
     val vm: GymsViewModel = viewModel()
 
 //lazy column
     LazyColumn {
         items(vm.state) { gym ->
-            GymItem(gym) {
-                vm.toggleFavoriteState(it)
-            }
+            GymItem(gym=gym, onFavIconClick = {
+                vm.toggleFavoriteState(it) } ,
+                onItemClick = {id->
+                    onItemClick(id) }
+            )
         }
     }
 }
@@ -56,14 +52,18 @@ fun GymsScreen() {
 
 
 @Composable
-fun GymItem(gym: Gym, onClick: (Int) -> Unit) {
+fun GymItem(gym: Gym,
+            onFavIconClick: (Int) -> Unit,
+            onItemClick: (Int) -> Unit) {
 //    var isFavoriteIcon by remember { mutableStateOf(false) }
     val icon = if (gym.isFavorite) Icons.Filled.Favorite
     else Icons.Filled.FavoriteBorder
 
     Card(
         elevation = CardDefaults.cardElevation(4.dp),
-        modifier = Modifier.padding(8.dp)
+        modifier = Modifier.padding(8.dp).clickable {
+            onItemClick(gym.id)
+        }
     ) {
 
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -76,7 +76,7 @@ fun GymItem(gym: Gym, onClick: (Int) -> Unit) {
             DefaultIcon(
                 icon, "Favorite Gym Icon", Modifier.weight(0.15f)
             ) {
-                onClick(gym.id)
+                onFavIconClick(gym.id)
             }
         }
 
@@ -112,8 +112,12 @@ fun DefaultIcon(
 }
 
 @Composable
-fun GymDetails(gym: Gym, modifier: Modifier = Modifier) {
-    Column(modifier = modifier) {
+fun GymDetails(
+    gym: Gym,
+    modifier: Modifier = Modifier,
+    horizontal: Alignment.Horizontal = Alignment.Start
+) {
+    Column(modifier = modifier, horizontalAlignment = horizontal) {
         Text(
             text = gym.gym_name, style = MaterialTheme.typography.titleLarge, color = Color.Blue
         )
@@ -141,10 +145,10 @@ fun GymDetails(gym: Gym, modifier: Modifier = Modifier) {
 //    )
 //}
 
-@Preview(showBackground = true)
-@Composable
-fun GymScreenPreview() {
-    GymsAroundTheme {
-        GymsScreen()
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun GymScreenPreview() {
+//    GymsAroundTheme {
+//        GymsScreen()
+//    }
+//}
