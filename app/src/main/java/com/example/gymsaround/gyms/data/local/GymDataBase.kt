@@ -1,4 +1,4 @@
-package com.example.gymsaround
+package com.example.gymsaround.gyms.data.local
 
 import android.content.Context
 import androidx.room.Database

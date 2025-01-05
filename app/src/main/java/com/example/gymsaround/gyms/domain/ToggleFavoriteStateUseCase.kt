@@ -1,6 +1,6 @@
 package com.example.gymsaround.gyms.domain
 
-import com.example.gymsaround.GymsRepository
+import com.example.gymsaround.gyms.data.GymsRepository
 
 class ToggleFavoriteStateUseCase {
     private val gymsRepository = GymsRepository()

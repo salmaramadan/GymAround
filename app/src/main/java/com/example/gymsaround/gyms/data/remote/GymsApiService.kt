@@ -1,5 +1,6 @@
-package com.example.gymsaround
+package com.example.gymsaround.gyms.data.remote
 
+import com.example.gymsaround.gyms.data.remote.RemoteGym
 import retrofit2.http.GET
 import retrofit2.http.Query
 

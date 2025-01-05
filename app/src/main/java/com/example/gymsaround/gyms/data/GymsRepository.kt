@@ -1,5 +1,10 @@
-package com.example.gymsaround
+package com.example.gymsaround.gyms.data
 
+import com.example.gymsaround.GymsApplication
+import com.example.gymsaround.gyms.data.local.GymDataBase
+import com.example.gymsaround.gyms.data.local.LocalGym
+import com.example.gymsaround.gyms.data.local.LocalGymFavoriteState
+import com.example.gymsaround.gyms.data.remote.GymsApiService
 import com.example.gymsaround.gyms.domain.Gym
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

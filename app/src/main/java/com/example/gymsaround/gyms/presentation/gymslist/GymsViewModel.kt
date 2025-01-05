@@ -72,16 +72,16 @@ class GymsViewModel() : ViewModel() {
 //        job.cancel()
 //    }
 
-    fun toggleFavoriteState(gymId: Int) {
-        val gyms = _state.gyms.toMutableList()
-        val itemIndex = gyms.indexOfFirst { it.id == gymId }
+    fun toggleFavoriteState(gymId: Int,oldValue:Boolean) {
+       // val gyms = _state.gyms.toMutableList()
+        //val itemIndex = gyms.indexOfFirst { it.id == gymId }
 //        gyms[itemIndex] = gyms[itemIndex].copy(isFavorite = !gyms[itemIndex].isFavorite)
 //        storeSelectedGym(gyms[itemIndex])
 //        state = gyms
         viewModelScope.launch {
 
 //            val updatedGymList = repo.toggleFavoriteGym(gymId, !gyms[itemIndex].isFavorite)
-            val updatedGymList = toggleFavoriteStateUseCase(gymId, gyms[itemIndex].isFavorite)
+            val updatedGymList = toggleFavoriteStateUseCase(gymId, oldValue)
             _state = _state.copy(
                 gyms = updatedGymList
             )

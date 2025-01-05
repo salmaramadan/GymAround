@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
@@ -25,13 +26,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.gymsaround.gyms.domain.Gym
 
 @Composable
-fun GymsScreen(onItemClick: (Int) -> Unit) {
-    val vm: _root_ide_package_.com.example.gymsaround.gyms.presentation.gymslist.GymsViewModel = viewModel()
-    val state = vm.state.value
+fun GymsScreen(
+    state: GymScreenState,
+    onItemClick: (Int) -> Unit,
+    onFavIconClick: (id: Int, oldValue: Boolean) -> Unit
+) {
+    //val vm:GymsViewModel = viewModel()
+    //val state = vm.state.value
 //    val dataIsLoading = gyms.isEmpty()
     Box(
         contentAlignment = Alignment.Center,
@@ -40,8 +44,8 @@ fun GymsScreen(onItemClick: (Int) -> Unit) {
         //lazy column
         LazyColumn {
             items(state.gyms) { gym ->
-                GymItem(gym = gym, onFavIconClick = {
-                    vm.toggleFavoriteState(it)
+                GymItem(gym = gym, onFavIconClick = {id,oldValue ->
+                    onFavIconClick(id,oldValue)
                 },
                     onItemClick = { id ->
                         onItemClick(id)
@@ -71,7 +75,7 @@ fun GymsScreen(onItemClick: (Int) -> Unit) {
 @Composable
 fun GymItem(
     gym: Gym,
-    onFavIconClick: (Int) -> Unit,
+    onFavIconClick: (Int,Boolean) -> Unit,
     onItemClick: (Int) -> Unit
 ) {
 //    var isFavoriteIcon by remember { mutableStateOf(false) }
@@ -97,7 +101,7 @@ fun GymItem(
             DefaultIcon(
                 icon, "Favorite Gym Icon", Modifier.weight(0.15f)
             ) {
-                onFavIconClick(gym.id)
+                onFavIconClick(gym.id,gym.isFavorite)
             }
         }
 

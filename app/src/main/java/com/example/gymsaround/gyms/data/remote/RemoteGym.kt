@@ -1,4 +1,4 @@
-package com.example.gymsaround
+package com.example.gymsaround.gyms.data.remote
 
 data class RemoteGym(
 

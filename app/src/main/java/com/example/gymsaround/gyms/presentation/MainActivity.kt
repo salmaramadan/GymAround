@@ -1,4 +1,4 @@
-package com.example.gymsaround
+package com.example.gymsaround.gyms.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -13,7 +13,9 @@ import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import com.example.gymsaround.gyms.presentation.details.GymsDetailsScreen
 import com.example.gymsaround.gyms.presentation.gymslist.GymsScreen
+import com.example.gymsaround.gyms.presentation.gymslist.GymsViewModel
 import com.example.gymsaround.ui.theme.GymsAroundTheme
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,10 +34,19 @@ private fun GymsAroundApp() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "gyms") {
         composable(route = "gyms") {
-            GymsScreen { id ->
-                navController.navigate("gyms/$id")
+            val vm:GymsViewModel = GymsViewModel()
+            GymsScreen(
+                state = vm.state.value,
+                onItemClick = {
+                        id ->
+                    navController.navigate("gyms/$id")
+                },
+                onFavIconClick = {id,oldValue->
+                    vm.toggleFavoriteState(id,oldValue)
+                }
+            )
 
-            }
+
         }
         composable(
             route = "gyms/{gym_id}",
@@ -45,10 +56,10 @@ private fun GymsAroundApp() {
                 },
             ),
             deepLinks = listOf(
-               navDeepLink {
+                navDeepLink {
 //                     uriPattern = "gyms/{gym_id}"
-                     uriPattern = "https://www.gymsaround.com/details/{gym_id}"
-               }
+                    uriPattern = "https://www.gymsaround.com/details/{gym_id}"
+                }
             )
         ) {
 //            val gymId=it.arguments?.getInt("gym_id")
@@ -56,4 +67,3 @@ private fun GymsAroundApp() {
         }
     }
 }
-
