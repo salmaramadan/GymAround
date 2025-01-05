@@ -1,8 +1,4 @@
-package com.example.gymsaround
-
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+package com.example.gymsaround.gyms.domain
 
 //val listOfGyms= listOf<Gym>(
 //    Gym(1,"Up Town Gym", "1234, 5th Avenue, New York"),
@@ -16,16 +12,10 @@ import androidx.room.PrimaryKey
 //)
 //data class Gym (val id : Int ,val name: String, val address: String, var isFavorite: Boolean = false)
 //class GymsModel : ArrayList<GymsModelItem>()
-@Entity(tableName = "gyms")
 data class Gym(
-    @ColumnInfo(name = "gym_id")
-    @PrimaryKey
     val id: Int,
-    @ColumnInfo(name = "gym_name")
     val gym_name: String,
-    @ColumnInfo(name = "gym_location")
     val gym_location: String,
-
     val is_open: Boolean,
-    var isFavorite: Boolean = false
+    val isFavorite: Boolean = false
 )

@@ -1,11 +1,11 @@
-package com.example.gymsaround
+package com.example.gymsaround.gyms.presentation.details
 
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.gymsaround.GymsApiService
+import com.example.gymsaround.gyms.domain.Gym
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -17,7 +17,6 @@ class GymsDetailsViewModel(
 ) : ViewModel() {
     val state = mutableStateOf<Gym?>(null)
     private var apiService: GymsApiService
-
     init {
         val retrofit: Retrofit =
             Retrofit.Builder().addConverterFactory(GsonConverterFactory.create())
@@ -39,6 +38,13 @@ class GymsDetailsViewModel(
     }
 
     private suspend fun getGymFromRemoteDB(id: Int) = withContext(Dispatchers.IO) {
-        apiService.getGymsByID(id).values.first()
+        apiService.getGymsByID(id).values.first().let { remoteGym ->
+            Gym(
+                remoteGym.id,
+                remoteGym.gym_name,
+                remoteGym.gym_location,
+                remoteGym.is_open,
+            )
+        }
     }
 }

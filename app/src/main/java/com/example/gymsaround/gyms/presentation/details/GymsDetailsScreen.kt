@@ -1,4 +1,4 @@
-package com.example.gymsaround
+package com.example.gymsaround.gyms.presentation.details
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.gymsaround.gyms.presentation.gymslist.DefaultIcon
+import com.example.gymsaround.gyms.presentation.gymslist.GymDetails
 
 @Composable
 fun GymsDetailsScreen() {
@@ -25,7 +27,7 @@ fun GymsDetailsScreen() {
 
             DefaultIcon(
                 icon = Icons.Filled.Place,
-                contentDescription = "Adress Icon",
+                contentDescription = "Address Icon",
                 modifier = Modifier.padding(bottom = 32.dp, top = 32.dp)
             )
             GymDetails(
