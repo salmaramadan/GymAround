@@ -5,8 +5,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.example.gymsaround.gyms.data.local.LocalGym
-import com.example.gymsaround.gyms.data.local.LocalGymFavoriteState
 
 
 @Dao
@@ -18,7 +16,7 @@ interface GymsDAO {
     suspend fun addAll(gyms: List<LocalGym>)
 
     @Update(entity = LocalGym::class)
-    suspend fun update(gymFavoriteState: LocalGymFavoriteState)
+    suspend fun update(localGymFavoriteState: LocalGymFavoriteState)
 
     @Query("SELECT * FROM gyms WHERE is_favorite = 1")
     suspend fun getFavoriteGyms(): List<LocalGym>

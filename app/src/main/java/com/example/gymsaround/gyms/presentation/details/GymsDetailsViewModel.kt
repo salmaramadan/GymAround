@@ -23,10 +23,8 @@ class GymsDetailsViewModel(
                 .baseUrl("https://gymsaround-15d3c-default-rtdb.firebaseio.com/").build()
 
         apiService = retrofit.create(GymsApiService::class.java)
-        val gymId= savedStateHandle.get<Int>("gym_id")
-        if (gymId != null) {
-            getGym(gymId)
-        }
+        val gymId= savedStateHandle.get<Int>("gym_id")?:0
+        getGym(gymId)
 
     }
 
@@ -40,10 +38,10 @@ class GymsDetailsViewModel(
     private suspend fun getGymFromRemoteDB(id: Int) = withContext(Dispatchers.IO) {
         apiService.getGymsByID(id).values.first().let { remoteGym ->
             Gym(
-                remoteGym.id,
-                remoteGym.gym_name,
-                remoteGym.gym_location,
-                remoteGym.is_open,
+               id= remoteGym.id,
+                gym_name = remoteGym.gym_name,
+                gym_location = remoteGym.gym_location,
+                is_open = remoteGym.is_open,
             )
         }
     }

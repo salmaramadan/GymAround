@@ -1,4 +1,4 @@
-package com.example.gymsaround.gyms.domain
+//package com.example.gymsaround.gyms.domain
 
 //val listOfGyms= listOf<Gym>(
 //    Gym(1,"Up Town Gym", "1234, 5th Avenue, New York"),
@@ -12,6 +12,8 @@ package com.example.gymsaround.gyms.domain
 //)
 //data class Gym (val id : Int ,val name: String, val address: String, var isFavorite: Boolean = false)
 //class GymsModel : ArrayList<GymsModelItem>()
+package com.example.gymsaround.gyms.domain
+
 data class Gym(
     val id: Int,
     val gym_name: String,

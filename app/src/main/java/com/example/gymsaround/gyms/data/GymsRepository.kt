@@ -48,10 +48,10 @@ class GymsRepository {
         val favoriteGymsList = gymsDao.getFavoriteGyms()
         gymsDao.addAll(gyms.map {
             LocalGym(
-                it.id,
-                it.gym_name,
-                it.gym_location,
-                it.is_open,
+               id =  it.id,
+                gym_name = it.gym_name,
+                gym_location = it.gym_location,
+                is_open = it.is_open,
             )
         })
 
