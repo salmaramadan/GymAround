@@ -1,29 +1,20 @@
 package com.example.gymsaround.gyms.data
 
-import com.example.gymsaround.GymsApplication
-import com.example.gymsaround.gyms.data.local.GymDataBase
+import com.example.gymsaround.gyms.data.local.GymsDAO
 import com.example.gymsaround.gyms.data.local.LocalGym
 import com.example.gymsaround.gyms.data.local.LocalGymFavoriteState
 import com.example.gymsaround.gyms.data.remote.GymsApiService
 import com.example.gymsaround.gyms.domain.Gym
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class GymsRepository {
-
-    private val apiService: GymsApiService = Retrofit.Builder().addConverterFactory(
-        GsonConverterFactory.create()
-    ).baseUrl("https://gymsaround-15d3c-default-rtdb.firebaseio.com/").build()
-        .create(GymsApiService::class.java)
-
-
-    private var gymsDao = GymDataBase.getDaoInstance(
-        GymsApplication.getApplicationContext()
-    )
-
-
+@Singleton
+class GymsRepository @Inject constructor(
+    private val apiService: GymsApiService,
+    private var gymsDao: GymsDAO,
+) {
     suspend fun loadGyms() = withContext(Dispatchers.IO) {
         try {
             updateLocalDatabase()
@@ -48,7 +39,7 @@ class GymsRepository {
         val favoriteGymsList = gymsDao.getFavoriteGyms()
         gymsDao.addAll(gyms.map {
             LocalGym(
-               id =  it.id,
+                id = it.id,
                 gym_name = it.gym_name,
                 gym_location = it.gym_location,
                 is_open = it.is_open,
