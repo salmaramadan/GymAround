@@ -62,6 +62,7 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.51.1")
     implementation(libs.androidx.monitor)
     implementation(libs.androidx.junit.ktx)
+    implementation(libs.androidx.ui.tooling.preview.android)
     androidTestImplementation("junit:junit:4.12")
     androidTestImplementation("junit:junit:4.12")
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")

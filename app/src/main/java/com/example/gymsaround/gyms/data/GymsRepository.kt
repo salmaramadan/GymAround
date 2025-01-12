@@ -13,7 +13,7 @@ import javax.inject.Singleton
 @Singleton
 class GymsRepository @Inject constructor(
     private val apiService: GymsApiService,
-    private var gymsDao: GymsDAO,
+    private val gymsDao: GymsDAO
 ) {
     suspend fun loadGyms() = withContext(Dispatchers.IO) {
         try {
@@ -23,43 +23,35 @@ class GymsRepository @Inject constructor(
                 throw Exception("No data available")
             }
         }
-//        gymsDao.getAll()
     }
 
     suspend fun getGyms(): List<Gym> {
         return withContext(Dispatchers.IO) {
-            return@withContext gymsDao.getAll()
-                .map { Gym(it.id, it.gym_name, it.gym_location, it.is_open, it.isFavorite) }
+            gymsDao.getAll().map {
+                Gym(it.id, it.gym_name, it.gym_location, it.is_open, it.isFavorite)
+            }
         }
     }
 
     private suspend fun updateLocalDatabase() {
         val gyms = apiService.getGyms()
-
         val favoriteGymsList = gymsDao.getFavoriteGyms()
         gymsDao.addAll(gyms.map {
             LocalGym(
                 id = it.id,
                 gym_name = it.gym_name,
                 gym_location = it.gym_location,
-                is_open = it.is_open,
+                is_open = it.is_open
             )
         })
 
         gymsDao.updateAll(favoriteGymsList.map {
-            LocalGymFavoriteState(
-                id = it.id, isFavorite = true
-            )
+            LocalGymFavoriteState(id = it.id, isFavorite = true)
         })
     }
 
-    suspend fun toggleFavoriteGym(gymId: Int, state: Boolean) =
-        withContext(Dispatchers.IO) {
-            gymsDao.update(
-                LocalGymFavoriteState(
-                    id = gymId, isFavorite = state
-                )
-            )
-            return@withContext gymsDao.getAll()
-        }
+    suspend fun toggleFavoriteGym(gymId: Int, state: Boolean) = withContext(Dispatchers.IO) {
+        gymsDao.update(LocalGymFavoriteState(id = gymId, isFavorite = state))
+        return@withContext gymsDao.getAll()
+    }
 }

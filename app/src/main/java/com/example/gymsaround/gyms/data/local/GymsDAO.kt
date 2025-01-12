@@ -22,4 +22,5 @@ interface GymsDAO {
     suspend fun getFavoriteGyms(): List<LocalGym>
 
     @Update(entity = LocalGym::class)
-    suspend fun updateAll(gymsStates: List<LocalGymFavoriteState>)}
+    suspend fun updateAll(gymsStates: List<LocalGymFavoriteState>)
+}
