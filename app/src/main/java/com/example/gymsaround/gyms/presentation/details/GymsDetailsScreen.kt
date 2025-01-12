@@ -24,7 +24,6 @@ fun GymsDetailsScreen() {
         Column(horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxSize().padding(16.dp)
         ) {
-
             DefaultIcon(
                 icon = Icons.Filled.Place,
                 contentDescription = "Address Icon",

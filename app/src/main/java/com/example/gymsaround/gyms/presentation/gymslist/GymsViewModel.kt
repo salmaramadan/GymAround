@@ -13,14 +13,16 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 @HiltViewModel
 class GymsViewModel @Inject constructor(
-    private val grtInitialGymsUseCase: GetInitialGymsUseCase,
+    private val getInitialGymsUseCase: GetInitialGymsUseCase,
     private val toggleFavoriteStateUseCase: ToggleFavoriteStateUseCase
 ) : ViewModel() {
 
     private var _state by mutableStateOf(GymScreenState(gyms = emptyList(), isLoading = true))
-    val state: State<GymScreenState> get() = derivedStateOf { _state }
+    val state: State<GymScreenState>
+        get() = derivedStateOf { _state }
 
     private val errorHandler = CoroutineExceptionHandler { _, throwable ->
         throwable.printStackTrace()
@@ -33,12 +35,8 @@ class GymsViewModel @Inject constructor(
 
     private fun getGyms() {
         viewModelScope.launch(errorHandler) {
-            try {
-                val receivedGyms = grtInitialGymsUseCase.invoke()
-                _state = _state.copy(gyms = receivedGyms, isLoading = false)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            val receivedGyms = getInitialGymsUseCase.invoke()
+            _state = _state.copy(gyms = receivedGyms, isLoading = false)
         }
     }
 

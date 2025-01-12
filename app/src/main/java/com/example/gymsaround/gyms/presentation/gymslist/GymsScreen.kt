@@ -1,5 +1,6 @@
 package com.example.gymsaround.gyms.presentation.gymslist
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -25,8 +26,11 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.example.gymsaround.gyms.domain.Gym
+import com.example.gymsaround.gyms.presentation.SemanticsDescription
 
 @Composable
 fun GymsScreen(
@@ -34,19 +38,17 @@ fun GymsScreen(
     onItemClick: (Int) -> Unit,
     onFavIconClick: (id: Int, oldValue: Boolean) -> Unit
 ) {
-    //val vm:GymsViewModel = viewModel()
-    //val state = vm.state.value
-//    val dataIsLoading = gyms.isEmpty()
+
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxWidth()
     ) {
-        //lazy column
         LazyColumn {
             items(state.gyms) { gym ->
-                GymItem(gym = gym, onFavIconClick = {id,oldValue ->
-                    onFavIconClick(id,oldValue)
-                },
+                GymItem(gym = gym,
+                    onFavIconClick = { id, oldValue ->
+                        onFavIconClick(id, oldValue)
+                    },
                     onItemClick = { id ->
                         onItemClick(id)
                     }
@@ -54,31 +56,29 @@ fun GymsScreen(
             }
         }
 
-        if (state.isLoading) CircularProgressIndicator()
-//        if (state.error != null) Text(text = state.error)
+        if (state.isLoading) {
+            Log.d("Is Loading or Not", "Yes Is Loading")
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .semantics {
+                        this.contentDescription = SemanticsDescription.GYMS_LIST_LOADING
+                    }
+            )
+        }
         state.error?.let {
             Text(text = it)
         }
+
     }
-
-
 }
-
-
-//    Column (Modifier.verticalScroll(rememberScrollState())) {
-//        listOfGyms.forEach { gym ->
-//            GymItem(gym)
-//        }
-//    }
-
 
 @Composable
 fun GymItem(
     gym: Gym,
-    onFavIconClick: (Int,Boolean) -> Unit,
+    onFavIconClick: (Int, Boolean) -> Unit,
     onItemClick: (Int) -> Unit
 ) {
-//    var isFavoriteIcon by remember { mutableStateOf(false) }
     val icon = if (gym.isFavorite) Icons.Filled.Favorite
     else Icons.Filled.FavoriteBorder
 
@@ -101,7 +101,7 @@ fun GymItem(
             DefaultIcon(
                 icon, "Favorite Gym Icon", Modifier.weight(0.15f)
             ) {
-                onFavIconClick(gym.id,gym.isFavorite)
+                onFavIconClick(gym.id, gym.isFavorite)
             }
         }
 
@@ -109,19 +109,12 @@ fun GymItem(
 }
 
 @Composable
-
 fun DefaultIcon(
     icon: ImageVector,
     contentDescription: String,
     modifier: Modifier,
     onClick: () -> Unit = {}
 ) {
-//    var isFavoriteIcon by remember {
-//
-//        mutableStateOf(false)
-//    }
-//    val icon = if (isFavoriteIcon) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder
-
     Image(
         imageVector = icon,
         contentDescription = contentDescription,
@@ -153,27 +146,5 @@ fun GymDetails(
             modifier = Modifier.alpha(0.74f)
         )
 
-
     }
 }
-
-
-//@Composable
-//fun GymIcon(vector: ImageVector, modifier: Modifier) {
-//    Image(
-//        imageVector = vector,
-//        contentDescription = "Gym Icon",
-//        modifier = modifier,
-//        colorFilter = ColorFilter.tint(
-//            Color.DarkGray
-//        )
-//    )
-//}
-
-//@Preview(showBackground = true)
-//@Composable
-//fun GymScreenPreview() {
-//    GymsAroundTheme {
-//        GymsScreen()
-//    }
-//}

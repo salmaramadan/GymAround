@@ -15,6 +15,7 @@ class GymsRepository @Inject constructor(
     private val apiService: GymsApiService,
     private val gymsDao: GymsDAO
 ) {
+
     suspend fun loadGyms() = withContext(Dispatchers.IO) {
         try {
             updateLocalDatabase()
@@ -36,6 +37,7 @@ class GymsRepository @Inject constructor(
     private suspend fun updateLocalDatabase() {
         val gyms = apiService.getGyms()
         val favoriteGymsList = gymsDao.getFavoriteGyms()
+
         gymsDao.addAll(gyms.map {
             LocalGym(
                 id = it.id,
