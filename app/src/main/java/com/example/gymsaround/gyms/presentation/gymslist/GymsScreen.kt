@@ -38,26 +38,22 @@ fun GymsScreen(
     onItemClick: (Int) -> Unit,
     onFavIconClick: (id: Int, oldValue: Boolean) -> Unit
 ) {
-
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxWidth()
     ) {
         LazyColumn {
             items(state.gyms) { gym ->
-                GymItem(gym = gym,
-                    onFavIconClick = { id, oldValue ->
-                        onFavIconClick(id, oldValue)
-                    },
-                    onItemClick = { id ->
-                        onItemClick(id)
-                    }
+                GymItem(
+                    gym = gym,
+                    onFavIconClick = { id, oldValue -> onFavIconClick(id, oldValue) },
+                    onItemClick = { id -> onItemClick(id) }
                 )
             }
         }
 
         if (state.isLoading) {
-            Log.d("Is Loading or Not", "Yes Is Loading")
+            Log.d("Is Loading or Not", "Yes, it's loading")
             CircularProgressIndicator(
                 modifier = Modifier
                     .align(Alignment.Center)
@@ -69,7 +65,6 @@ fun GymsScreen(
         state.error?.let {
             Text(text = it)
         }
-
     }
 }
 
@@ -79,32 +74,32 @@ fun GymItem(
     onFavIconClick: (Int, Boolean) -> Unit,
     onItemClick: (Int) -> Unit
 ) {
-    val icon = if (gym.isFavorite) Icons.Filled.Favorite
-    else Icons.Filled.FavoriteBorder
+    val icon = if (gym.isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder
 
     Card(
         elevation = CardDefaults.cardElevation(4.dp),
         modifier = Modifier
             .padding(8.dp)
-            .clickable {
-                onItemClick(gym.id)
-            }
+            .clickable { onItemClick(gym.id) }
     ) {
-
         Row(verticalAlignment = Alignment.CenterVertically) {
             DefaultIcon(
-                Icons.Filled.Place, "Place Icon", Modifier.weight(0.15f),
+                icon = Icons.Filled.Place,
+                contentDescription = "Place Icon",
+                modifier = Modifier.weight(0.15f)
             )
             GymDetails(
-                gym, Modifier.weight(0.70f)
+                gym = gym,
+                modifier = Modifier.weight(0.70f)
             )
             DefaultIcon(
-                icon, "Favorite Gym Icon", Modifier.weight(0.15f)
+                icon = icon,
+                contentDescription = "Favorite Gym Icon",
+                modifier = Modifier.weight(0.15f)
             ) {
                 onFavIconClick(gym.id, gym.isFavorite)
             }
         }
-
     }
 }
 
@@ -120,12 +115,8 @@ fun DefaultIcon(
         contentDescription = contentDescription,
         modifier = modifier
             .padding(8.dp)
-            .clickable {
-                onClick()
-            },
-        colorFilter = ColorFilter.tint(
-            Color.DarkGray
-        )
+            .clickable { onClick() },
+        colorFilter = ColorFilter.tint(Color.DarkGray)
     )
 }
 
@@ -133,18 +124,19 @@ fun DefaultIcon(
 fun GymDetails(
     gym: Gym,
     modifier: Modifier = Modifier,
-    horizontal: Alignment.Horizontal = Alignment.Start
+    horizontalAlignment: Alignment.Horizontal = Alignment.Start
 ) {
-    Column(modifier = modifier, horizontalAlignment = horizontal) {
+    Column(modifier = modifier, horizontalAlignment = horizontalAlignment) {
         Text(
-            text = gym.gym_name, style = MaterialTheme.typography.titleLarge, color = Color.Blue
+            text = gym.gymName,
+            style = MaterialTheme.typography.titleLarge,
+            color = Color.Blue
         )
 
         Text(
-            text = gym.gym_location,
+            text = gym.gymLocation,
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.alpha(0.74f)
         )
-
     }
 }

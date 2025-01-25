@@ -17,34 +17,25 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object GymsDataModule {
-
     @Provides
-    fun provideApiServiceInstance(retrofit: Retrofit): GymsApiService {
-        return retrofit.create(GymsApiService::class.java)
-    }
+    fun provideApiServiceInstance(retrofit: Retrofit): GymsApiService =
+        retrofit.create(GymsApiService::class.java)
 
     @Singleton
     @Provides
-    fun providesRetrofitInstance(): Retrofit {
-        return Retrofit.Builder()
+    fun providesRetrofitInstance(): Retrofit =
+        Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl("https://gymsaround-15d3c-default-rtdb.firebaseio.com/")
             .build()
-    }
 
     @Provides
-    fun providesRoomDao(db: GymDataBase): GymsDAO {
-        return db.dao
-    }
+    fun providesRoomDao(db: GymDataBase): GymsDAO = db.dao
 
     @Singleton
     @Provides
-    fun providesRoomDataBase(@ApplicationContext context: Context): GymDataBase {
-        return Room.databaseBuilder(
-            context,
-            GymDataBase::class.java,
-            "gyms_db"
-        ).fallbackToDestructiveMigration()
+    fun providesRoomDataBase(@ApplicationContext context: Context): GymDataBase =
+        Room.databaseBuilder(context, GymDataBase::class.java, "gyms_db")
+            .fallbackToDestructiveMigration()
             .build()
-    }
 }

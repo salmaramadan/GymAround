@@ -72,6 +72,7 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.7.6")
     implementation("androidx.compose.ui:ui-test-junit4:1.7.6")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.7.6")
     implementation ("androidx.hilt:hilt-navigation-compose:1.2.0")
 }

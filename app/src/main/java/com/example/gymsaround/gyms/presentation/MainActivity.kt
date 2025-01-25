@@ -38,7 +38,7 @@ private fun GymsAroundApp() {
         composable(route = "gyms") {
             val vm: GymsViewModel = hiltViewModel()
             GymsScreen(
-                state = vm.state.value,
+                state = vm.state, // Accessing state directly
                 onItemClick = { id -> navController.navigate("gyms/$id") },
                 onFavIconClick = { id, oldValue -> vm.toggleFavoriteState(id, oldValue) }
             )

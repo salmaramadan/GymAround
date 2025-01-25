@@ -8,7 +8,7 @@ class ToggleFavoriteStateUseCase @Inject constructor(
     private val getSortedGymsUseCase: GetSortedGymsUseCase
 ) {
     suspend operator fun invoke(gymId: Int, oldValue: Boolean): List<Gym> {
-        val newState = oldValue.not()
+        val newState = !oldValue
         gymsRepository.toggleFavoriteGym(gymId, newState)
         return getSortedGymsUseCase()
     }

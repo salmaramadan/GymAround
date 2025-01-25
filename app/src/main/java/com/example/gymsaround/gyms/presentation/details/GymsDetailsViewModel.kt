@@ -39,9 +39,9 @@ class GymsDetailsViewModel(
         apiService.getGymsByID(id).values.first().let { remoteGym ->
             Gym(
                 id = remoteGym.id,
-                gym_name = remoteGym.gym_name,
-                gym_location = remoteGym.gym_location,
-                is_open = remoteGym.is_open,
+                gymName = remoteGym.gymName,
+                gymLocation = remoteGym.gymLocation,
+                isOpen = remoteGym.isOpen,
             )
         }
     }

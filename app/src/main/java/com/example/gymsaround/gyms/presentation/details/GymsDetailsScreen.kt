@@ -21,22 +21,27 @@ fun GymsDetailsScreen() {
     val item = viewModel.state.value
 
     item?.let {
-        Column(horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize().padding(16.dp)
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
         ) {
             DefaultIcon(
                 icon = Icons.Filled.Place,
                 contentDescription = "Address Icon",
                 modifier = Modifier.padding(bottom = 32.dp, top = 32.dp)
             )
+
             GymDetails(
-                gym = item,
+                gym = it,
                 modifier = Modifier.padding(32.dp),
-                horizontal = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally
             )
+
             Text(
-                text = if (item.is_open) "Opened" else "Closed",
-                color = if (item.is_open) Color.Green else Color.Red
+                text = if (it.isOpen) "Opened" else "Closed",
+                color = if (it.isOpen) Color.Green else Color.Red
             )
         }
     }
